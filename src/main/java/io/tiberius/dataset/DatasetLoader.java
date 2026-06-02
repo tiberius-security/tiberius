@@ -19,7 +19,7 @@ import java.util.*;
  *
  * <p>Supports two JSON formats:</p>
  *
- * <h3>Full Format (recommended for complex datasets)</h3>
+ * <h2>Full Format (recommended for complex datasets)</h2>
  * <pre>{@code
  * {
  *   "name": "GPT-OSS-20B Red Team Dataset",
@@ -41,7 +41,7 @@ import java.util.*;
  * }
  * }</pre>
  *
- * <h3>Simple Format (for quick payload lists)</h3>
+ * <h2>Simple Format (for quick payload lists)</h2>
  * <pre>{@code
  * {
  *   "name": "Quick Jailbreak Test",
