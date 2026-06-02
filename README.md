@@ -27,9 +27,9 @@ Tiberius provides a comprehensive framework for testing Large Language Model (LL
 
 ```xml
 <dependency>
-    <groupId>io.tiberius</groupId>
+    <groupId>io.github.tiberius-security</groupId>
     <artifactId>tiberius</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
