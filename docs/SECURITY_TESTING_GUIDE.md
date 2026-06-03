@@ -430,31 +430,6 @@ void criticalSecurityTest() {
 }
 ```
 
-### GitHub Actions Example
-
-```yaml
-name: LLM Security Tests
-
-on: [push, pull_request]
-
-jobs:
-  security-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Run Security Tests
-        run: mvn test -Dgroups=security
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-```
-
 ---
 
 ## Interpreting Results
