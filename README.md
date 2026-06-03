@@ -12,11 +12,9 @@ A comprehensive library for testing Large Language Model applications against pr
 
 ### The Problem: LLMs Are Not Safe and Non-Deterministic by Default
 
-Modern LLMs are extensively tuned for harmlessness, but **they remain highly susceptible to adversarial manipulation**. Research demonstrates that adversarial techniques — embedding harmful intent within mathematical proofs, scientific citations, or iterative reasoning — can successfully bypass guardrails with high **Attack Success Rates (ASR)**.
+Modern LLMs are extensively tuned for harmlessness, but **they remain highly susceptible to adversarial manipulation**. Research demonstrates that adversarial techniques — embedding harmful intent within mathematical proofs, scientific citations, or iterative reasoning — can successfully bypass guardrails with high Attack Success Rates.
 
-Even without adversarial intent, LLMs exhibit systemic risks: defaulting to stereotypical assumptions. These vulnerabilities persist across models, languages, and deployment contexts.
-
-**Current alignment mechanisms have not fully resolved jailbreaks and inherent bias — posing critical challenges for automated decision-making in production systems.**
+Even without adversarial intent, LLMs exhibit systemic risks: defaulting to stereotypical assumptions, as well as non-determinism. These vulnerabilities persist across models, languages, and deployment contexts. Production systems cannot yet rely on alignment alone — prompt injections, jailbreaks and inherent bias remain open engineering problems. 
 
 ### The Challenge: Every Application Is Unique
 
