@@ -10,7 +10,33 @@ A comprehensive library for testing Large Language Model applications against pr
 
 ## Why Tiberius?
 
-LLMs are inherently **non-deterministic** — the same attack prompt may succeed on one attempt and fail on another. Traditional pass/fail testing doesn't capture this reality. Tiberius brings **probabilistic security testing** to Java, letting you measure and assert on attack success *rates* rather than single outcomes.
+### The Problem: LLMs Are Not Safe by Default
+
+Modern LLMs are extensively tuned for harmlessness, but **they remain highly susceptible to adversarial manipulation**. Research demonstrates that adversarial techniques — embedding harmful intent within mathematical proofs, scientific citations, or iterative reasoning — can successfully bypass guardrails with **Attack Success Rates (ASR) up to 67%**.
+
+Even without adversarial intent, LLMs exhibit systemic risks: defaulting to stereotypical assumptions in over 35% of ambiguous scenarios. These vulnerabilities persist across models, languages, and deployment contexts.
+
+**Current alignment mechanisms have not fully resolved jailbreaks and inherent bias — posing critical challenges for automated decision-making in production systems.**
+
+### The Challenge: Every Application Is Unique
+
+Generic security benchmarks don't reflect your specific:
+- **System prompts** and business logic
+- **User input patterns** and edge cases
+- **Guardrail implementations** and filtering rules
+- **Model configurations** and fine-tuning
+
+Your Java application needs **its own security test datasets** — tailored to your context, your threats, your users.
+
+### The Solution: Tiberius
+
+Tiberius solves this by providing a **complete security testing workflow**:
+
+1. **Scan** your LLM with 210+ attack probes to discover vulnerabilities
+2. **Capture** results in reusable test fixtures specific to your application
+3. **Validate** your guardrails against real attacks that bypassed your model
+
+Because LLMs are inherently **non-deterministic** — the same attack may succeed on one attempt and fail on another — Tiberius brings **probabilistic security testing** to Java. Measure and assert on attack success *rates*, not single outcomes.
 
 ### What Makes Tiberius Unique
 
