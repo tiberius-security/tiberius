@@ -10,11 +10,11 @@ A comprehensive library for testing Large Language Model applications against pr
 
 ## Why Tiberius?
 
-### The Problem: LLMs Are Not Safe by Default
+### The Problem: LLMs Are Not Safe and Non-Deterministic by Default
 
-Modern LLMs are extensively tuned for harmlessness, but **they remain highly susceptible to adversarial manipulation**. Research demonstrates that adversarial techniques — embedding harmful intent within mathematical proofs, scientific citations, or iterative reasoning — can successfully bypass guardrails with **Attack Success Rates (ASR) up to 67%**.
+Modern LLMs are extensively tuned for harmlessness, but **they remain highly susceptible to adversarial manipulation**. Research demonstrates that adversarial techniques — embedding harmful intent within mathematical proofs, scientific citations, or iterative reasoning — can successfully bypass guardrails with high **Attack Success Rates (ASR)**.
 
-Even without adversarial intent, LLMs exhibit systemic risks: defaulting to stereotypical assumptions in over 35% of ambiguous scenarios. These vulnerabilities persist across models, languages, and deployment contexts.
+Even without adversarial intent, LLMs exhibit systemic risks: defaulting to stereotypical assumptions. These vulnerabilities persist across models, languages, and deployment contexts.
 
 **Current alignment mechanisms have not fully resolved jailbreaks and inherent bias — posing critical challenges for automated decision-making in production systems.**
 
@@ -40,13 +40,13 @@ Because LLMs are inherently **non-deterministic** — the same attack may succee
 
 ### What Makes Tiberius Unique
 
-| Feature | Description |
-|---------|-------------|
+| Feature | Description                                                                                                          |
+|---------|----------------------------------------------------------------------------------------------------------------------|
 | **Probabilistic Testing** | Built on [PUnit](https://github.com/mavai-org/punit) - run attacks multiple times and assert on statistical outcomes |
-| **Test Fixtures** | Save scan results to JSON fixtures, enabling reproducible regression testing |
-| **Guardrail Testing** | Test your LangChain4J guardrails against real attack datasets |
-| **Full Workflow** | Scan → Fixture → Guardrail validation pipeline |
-| **Spring Boot Native** | Auto-configuration and custom annotations for seamless integration |
+| **Test Fixtures** | Save scan results to JSON fixtures, enabling reproducible regression testing                                         |
+| **Guardrail Testing** | Test your (e.g., LangChain4J) guardrails against real attack datasets                                                |
+| **Full Workflow** | Scan → Fixture → Guardrail validation pipeline                                                                       |
+| **Spring Boot Native** | Auto-configuration and custom annotations for seamless integration                                                   |
 
 ---
 
@@ -150,7 +150,7 @@ void probabilisticSecurityScan(TiberiusScanner scanner) {
 
     // Run each probe multiple times to measure true success rate
     ScanReport report = scanner.multiTrialScan()
-        .samples(5)           // Run each attack 5 times
+        .samples(35)           // Run each attack 35 times
         .execute();
 
     // Assert on statistical outcomes
