@@ -89,8 +89,12 @@ public final class TiberiusScanner {
     public ScanReport scan() {
         final Instant startTime = Instant.now();
         final List<Probe> probesToRun = selectProbes();
+        final int totalPrompts = probesToRun.stream()
+                .mapToInt(p -> p.getPrompts().size())
+                .sum();
 
-        log.info("Starting scan with {} probes against {}", probesToRun.size(), generator.getName());
+        log.info("Starting scan with {} probes ({} total prompts) against {}",
+                probesToRun.size(), totalPrompts, generator.getName());
 
         final List<ScanResult> results;
         if (concurrency > 1 && probesToRun.size() > 1) {
@@ -112,8 +116,20 @@ public final class TiberiusScanner {
     }
 
     public ScanResult runProbe(final Probe probe, final Buff buff) {
+        return runProbe(probe, probe.getPrompt(), buff);
+    }
+
+    /**
+     * Run a single probe with a specific prompt and buff transformation.
+     * This allows testing individual prompts from a probe's prompt list.
+     *
+     * @param probe The probe being tested
+     * @param originalPrompt The specific prompt to test
+     * @param buff The buff transformation to apply
+     * @return The scan result
+     */
+    public ScanResult runProbe(final Probe probe, final String originalPrompt, final Buff buff) {
         final Instant startTime = Instant.now();
-        final String originalPrompt = probe.getPrompt();
         final String transformedPrompt = buff.transform(originalPrompt);
         final GeneratorResponse response = generator.generate(transformedPrompt);
         final Duration duration = Duration.between(startTime, Instant.now());
@@ -193,13 +209,16 @@ public final class TiberiusScanner {
         final List<Buff> buffsToApply = getBuffsToApply();
 
         for (final Probe probe : probes) {
-            for (final Buff buff : buffsToApply) {
-                final ScanResult result = runProbe(probe, buff);
-                results.add(result);
-                logResult(result);
-                if (failFast && result.attackSucceeded()) {
-                    log.warn("Fail fast triggered: attack succeeded for probe {}", probe.getId());
-                    return results;
+            final List<String> prompts = probe.getPrompts();
+            for (final String prompt : prompts) {
+                for (final Buff buff : buffsToApply) {
+                    final ScanResult result = runProbe(probe, prompt, buff);
+                    results.add(result);
+                    logResult(result);
+                    if (failFast && result.attackSucceeded()) {
+                        log.warn("Fail fast triggered: attack succeeded for probe {}", probe.getId());
+                        return results;
+                    }
                 }
             }
         }
@@ -211,8 +230,12 @@ public final class TiberiusScanner {
         final List<CompletableFuture<ScanResult>> futures = new ArrayList<>();
 
         for (final Probe probe : probes) {
-            for (final Buff buff : buffsToApply) {
-                futures.add(CompletableFuture.supplyAsync(() -> runProbe(probe, buff), executor));
+            final List<String> prompts = probe.getPrompts();
+            for (final String prompt : prompts) {
+                for (final Buff buff : buffsToApply) {
+                    futures.add(CompletableFuture.supplyAsync(
+                            () -> runProbe(probe, prompt, buff), executor));
+                }
             }
         }
 
