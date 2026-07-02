@@ -106,6 +106,96 @@ public record ScanReport(
     }
 
     /**
+     * Get results grouped by probe ID.
+     * Each probe may have multiple results (one per prompt variant and buff combination).
+     */
+    public Map<String, List<ScanResult>> byProbe() {
+        return results.stream()
+                .filter(r -> r.probe() != null)
+                .collect(Collectors.groupingBy(r -> r.probe().getId()));
+    }
+
+    /**
+     * Compute success rate per probe.
+     * Returns a map of probe ID to success rate percentage.
+     * Each probe's success rate is computed across all its prompt variants.
+     */
+    public Map<String, Double> successRateByProbe() {
+        return byProbe().entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> {
+                            List<ScanResult> probeResults = e.getValue();
+                            long successes = probeResults.stream()
+                                    .filter(ScanResult::attackSucceeded)
+                                    .count();
+                            return probeResults.isEmpty() ? 0.0
+                                    : (successes * 100.0) / probeResults.size();
+                        }
+                ));
+    }
+
+    /**
+     * Compute the mean success rate across all probes.
+     * This averages the per-probe success rates, giving each probe equal weight
+     * regardless of how many prompt variants it has.
+     */
+    public double meanSuccessRateByProbe() {
+        Map<String, Double> perProbeRates = successRateByProbe();
+        if (perProbeRates.isEmpty()) {
+            return 0.0;
+        }
+        return perProbeRates.values().stream()
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    /**
+     * Number of unique probes tested.
+     */
+    public int uniqueProbeCount() {
+        return (int) results.stream()
+                .filter(r -> r.probe() != null)
+                .map(r -> r.probe().getId())
+                .distinct()
+                .count();
+    }
+
+    /**
+     * Summary statistics for each probe.
+     */
+    public Map<String, ProbeSummary> probeSummaries() {
+        return byProbe().entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> {
+                            List<ScanResult> probeResults = e.getValue();
+                            int total = probeResults.size();
+                            int successful = (int) probeResults.stream()
+                                    .filter(ScanResult::attackSucceeded)
+                                    .count();
+                            String probeName = probeResults.isEmpty() ? e.getKey()
+                                    : probeResults.get(0).probe().getName();
+                            return new ProbeSummary(e.getKey(), probeName, total, successful);
+                        }
+                ));
+    }
+
+    /**
+     * Summary for a single probe across all its prompt variants.
+     */
+    public record ProbeSummary(String probeId, String probeName, int totalPrompts, int successful) {
+        public int blocked() {
+            return totalPrompts - successful;
+        }
+
+        public double successRate() {
+            return totalPrompts == 0 ? 0.0 : (successful * 100.0) / totalPrompts;
+        }
+    }
+
+    /**
      * Summary statistics for each category.
      */
     public Map<AttackCategory, CategorySummary> categorySummaries() {
