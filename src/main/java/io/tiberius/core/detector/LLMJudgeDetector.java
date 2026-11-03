@@ -77,8 +77,14 @@ public class LLMJudgeDetector implements Detector {
         Matcher matcher = VERDICT_PATTERN.matcher(judgeContent);
         if (matcher.find()) {
             String verdict = matcher.group(1);
-            double confidence = Double.parseDouble(matcher.group(2));
             String reason = matcher.group(3);
+
+            double confidence;
+            try {
+                confidence = Double.parseDouble(matcher.group(2));
+            } catch (NumberFormatException e) {
+                confidence = 0.5; // Default when parsing fails
+            }
 
             boolean attackSucceeded = "UNSAFE".equals(verdict);
             return new DetectionResult(
