@@ -8,6 +8,20 @@ A comprehensive library for testing Large Language Model applications against pr
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21%2B-orange)](https://openjdk.org/projects/jdk/21/)
 
+## Governance and Sponsorship Transparency
+
+<p align="center">
+  <a href="https://karakun.com">
+    <img src="media/karakun-logo.PNG" alt="Karakun" width="220"/>
+  </a>
+</p>
+
+Tiberius is proudly sponsored by [Karakun](https://www.karakun.com), a Swiss software engineering consultancy specialising in scalable systems, AI, and enterprise-grade solutions.
+
+### Independence
+
+All technical decisions within Tiberius are made independently of its sponsor.
+
 ## Why Tiberius?
 
 ### The Problem: LLMs Are Not Safe and Non-Deterministic by Default
