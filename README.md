@@ -16,7 +16,7 @@ A comprehensive library for testing Large Language Model applications against pr
   </a>
 </p>
 
-PUnit is proudly sponsored by [Karakun](https://www.karakun.com), a Swiss software engineering consultancy specialising in scalable systems, AI, and enterprise-grade solutions.
+Tiberius is proudly sponsored by [Karakun](https://www.karakun.com), a Swiss software engineering consultancy specialising in scalable systems, AI, and enterprise-grade solutions.
 
 ### Independence
 
